@@ -101,6 +101,9 @@ function dial(id,listId,start,avgV,notes){
 var mn=P.indexOf(Math.min.apply(null,P.slice(6,18))),mx=P.indexOf(Math.max.apply(null,P));
 dial("d1","n1",6,DAY,[[8,"Commute to work"],[9,"Workday starts"],[mn,"Calmest hour"],[17,"Commute home"]]);
 dial("d2","n2",18,NIGHT,[[19,"Family dinner"],[mx,mx>=18||mx<6?"Peak hour":"Evening"],[23,"Bedtime"],[4,"Before dawn"]]);
+/* auto-height for iframe embeds */
+(function(){var last=0;function send(){var h=Math.ceil(document.documentElement.getBoundingClientRect().height);if(h!==last){last=h;try{window.parent.postMessage({kiEmbed:"kyiv-alerts-clock",height:h},"*")}catch(e){}}}
+window.addEventListener("load",send);window.addEventListener("resize",send);if(window.ResizeObserver)new ResizeObserver(send).observe(document.body);setTimeout(send,300);})();
 </script>
 </body>
 </html>
