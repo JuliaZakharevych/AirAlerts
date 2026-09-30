@@ -89,11 +89,18 @@ function draw(){
  function el(n,a,p){var e=document.createElementNS(ns,n);for(var k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e}
  function X(h){return x0+h/24*cw}
  el("rect",{x:X(9),y:top-4,width:X(18)-X(9),height:NDAYS*rowH+4,fill:"var(--band)"});
- for(var h=0;h<=24;h+=(narrow&&!SOCIAL?6:3)){var x=X(h);
+ /* pick tick step + label format so labels never collide (measured, min 8 px gap) */
+ var probe=el("text",{"font-size":fs});probe.textContent="00:00";var LW=probe.getBBox().width;probe.textContent="24h";var SW=probe.getBBox().width;probe.remove();
+ var step=3,short=false,px3=cw/8;
+ if(px3<LW+16){step=6;if(cw/4<LW+16){short=true;if(cw/4<SW+16)step=12}}
+ if(SOCIAL){step=3;short=false}
+ for(var h=0;h<=24;h+=step){var x=X(h);
   el("line",{x1:x,x2:x,y1:top-4,y2:top+NDAYS*rowH,stroke:h%6==0?"#D1D5DB":"var(--grid)","stroke-width":1});
-  var tx=el("text",{x:x,y:top-(SOCIAL?12:10),"text-anchor":h==0?"start":(h==24?"end":"middle"),"font-size":fs,fill:"var(--mute)"});tx.textContent=(narrow&&!SOCIAL)?(h==24?"24h":String(h)):((h<10?"0":"")+h+":00")}
+  var tx=el("text",{x:x,y:top-(SOCIAL?12:10),"text-anchor":"middle","font-size":fs,fill:"var(--mute)","class":"ax"});
+  tx.textContent=short?(h==24?"24h":String(h)):((h<10?"0":"")+h+":00")}
+ if(step>3&&!SOCIAL)for(var h2=3;h2<24;h2+=3)if(h2%step)el("line",{x1:X(h2),x2:X(h2),y1:top-4,y2:top+NDAYS*rowH,stroke:"var(--grid)","stroke-width":1});
  var mx=Math.max.apply(null,tot), tw=right-gapW-(SOCIAL?56:(narrow?40:44));
- var hd=el("text",{x:W,y:top-(SOCIAL?12:10),"text-anchor":"end","font-size":fs,fill:"var(--mute)"});hd.textContent=(narrow&&!SOCIAL)?"":"Hours";
+ var hd=el("text",{x:W,y:top-(SOCIAL?12:10),"text-anchor":"end","font-size":fs,fill:"var(--mute)","class":"ax"});hd.textContent=(narrow&&!SOCIAL)?"":"Hours";
  for(var d=0;d<NDAYS;d++){var y=top+d*rowH,dt=new Date(YEAR,MONTH,d+1),we=dt.getDay()==0||dt.getDay()==6;
   var l=el("text",{x:0,y:y+rowH/2+fs*.36,"font-size":fs,fill:we?"var(--ink)":"var(--txt)","font-weight":we?700:400});
   l.textContent=(narrow&&!SOCIAL?DOW[dt.getDay()].charAt(0)+" ":DOW[dt.getDay()]+" ")+(d+1);
