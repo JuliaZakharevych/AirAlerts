@@ -46,7 +46,7 @@ body.social .logo{width:320px}
 <body>
 <main>
 <h1>Kyiv spent a third of September under air&nbsp;raid&nbsp;alerts</h1>
-<p class="sub">Each bar is one air raid alert in Kyiv, September 2026. Right: hours under alert per&nbsp;day</p>
+<p class="sub">Each bar is one air raid alert in Kyiv, September&nbsp;2026</p>
 <div class="key"><span><i style="background:var(--b7)"></i>Air raid alert</span><span><i style="background:var(--band)"></i>Working hours (9 AM–6 PM)</span></div>
 <p class="hint">Tap or hover a bar for the exact time</p>
 <div id="chart"><div id="tip"></div></div>
@@ -79,7 +79,7 @@ function dur(ms){var m=Math.round(ms/6e4),h=Math.floor(m/60);return(h?h+" h ":""
 var ns="http://www.w3.org/2000/svg";
 function draw(){
  var box=document.getElementById("chart"),W=SOCIAL?952:box.clientWidth,narrow=W<560;
- var fs=SOCIAL?16:12, lab=SOCIAL?72:(narrow?48:64), right=SOCIAL?120:(narrow?40:112), top=SOCIAL?32:24;
+ var fs=SOCIAL?16:12, lab=SOCIAL?64:(narrow?36:48), right=SOCIAL?120:(narrow?40:112), top=SOCIAL?32:24;
  var rowH=SOCIAL?28:20, barH=rowH-(SOCIAL?6:6), gapW=24;
  var x0=lab, x1=W-right-gapW, cw=x1-x0, H=top+NDAYS*rowH+ (SOCIAL?0:8);
  var old=box.querySelector("svg");if(old)old.remove();
@@ -100,10 +100,10 @@ function draw(){
   tx.textContent=short?(h==24?"24h":String(h)):((h<10?"0":"")+h+":00")}
  if(step>3&&!SOCIAL)for(var h2=3;h2<24;h2+=3)if(h2%step)el("line",{x1:X(h2),x2:X(h2),y1:top-4,y2:top+NDAYS*rowH,stroke:"var(--grid)","stroke-width":1});
  var mx=Math.max.apply(null,tot), tw=right-gapW-(SOCIAL?56:(narrow?40:44));
- var hd=el("text",{x:W,y:top-(SOCIAL?12:10),"text-anchor":"end","font-size":fs,fill:"var(--mute)","class":"ax"});hd.textContent=(narrow&&!SOCIAL)?"":"Hours";
+ var hd=el("text",{x:W,y:top-(SOCIAL?12:10),"text-anchor":"end","font-size":fs,fill:"var(--mute)","class":"ax"});hd.textContent=(narrow||SOCIAL)?"Hours":"Hours per day";
  for(var d=0;d<NDAYS;d++){var y=top+d*rowH,dt=new Date(YEAR,MONTH,d+1),we=dt.getDay()==0||dt.getDay()==6;
-  var l=el("text",{x:0,y:y+rowH/2+fs*.36,"font-size":fs,fill:we?"var(--ink)":"var(--txt)","font-weight":we?700:400});
-  l.textContent=(narrow&&!SOCIAL?DOW[dt.getDay()].charAt(0)+" ":DOW[dt.getDay()]+" ")+(d+1);
+  var l=el("text",{x:x0-(SOCIAL?12:8),y:y+rowH/2+fs*.36,"text-anchor":"end","font-size":fs,fill:"var(--mute)","font-weight":400});
+  l.textContent=String(d+1);
   el("line",{x1:x0,x2:x1,y1:y+rowH/2,y2:y+rowH/2,stroke:"var(--grid)","stroke-width":1});
   var bw=Math.max(1,tot[d]/mx*tw);if(!(narrow&&!SOCIAL))el("rect",{x:W-right+gapW,y:y+(rowH-barH)/2,width:bw,height:barH,fill:"var(--b3)",rx:2});
   var v=el("text",{x:W,y:y+rowH/2+fs*.36,"text-anchor":"end","font-size":fs,"font-weight":700,fill:"var(--ink)"});v.textContent=tot[d].toFixed(1)}
