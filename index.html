@@ -47,11 +47,11 @@ footer{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
 <main>
 <h1>How air raid alerts break up an ordinary day in&nbsp;Kyiv</h1>
 <p class="sub" id="sub"></p>
-<div class="key"><span><i style="background:var(--b7)"></i>Waking hours</span><span><i style="background:var(--b9)"></i>Sleeping hours (11 PM–6 AM)</span></div>
+<div class="key"><span><i style="background:var(--b7)"></i>6 AM–11 PM</span><span><i style="background:var(--b9)"></i>Night, 11 PM–6 AM</span></div>
 <p class="hint">Tap or hover a wedge for the exact value</p>
 <div class="dials">
- <div><div class="cap">DAY<span>6 AM–6 PM</span></div><svg id="d1" viewBox="0 0 400 400" role="img" aria-label="Clock showing the share of each daytime hour under air raid alert"></svg><ol class="nl" id="n1"></ol></div>
- <div><div class="cap">NIGHT<span>6 PM–6 AM</span></div><svg id="d2" viewBox="0 0 400 400" role="img" aria-label="Clock showing the share of each nighttime hour under air raid alert"></svg><ol class="nl" id="n2"></ol></div>
+ <div><div class="cap">DAY<span>6 AM–6 PM</span></div><svg id="d1" viewBox="0 0 400 400" role="img" aria-label="Clock showing the share of each daytime hour under air raid alert"></svg></div>
+ <div><div class="cap">NIGHT<span>6 PM–6 AM</span></div><svg id="d2" viewBox="0 0 400 400" role="img" aria-label="Clock showing the share of each nighttime hour under air raid alert"></svg></div>
 </div>
 <footer>
  <div class="src">Source: Kyiv City State Administration, kyiv.digital</div>
@@ -72,8 +72,9 @@ var P=H.map(function(ms){return ms/(DAYS*36e5)*100});
 function avg(a){return a.reduce(function(x,y){return x+y},0)/a.length}
 var DAY=avg(P.slice(6,18)),NIGHT=avg(P.slice(18).concat(P.slice(0,6)));
 function pc(v){return Math.floor(v+0.5)+"%"}
-function pad(h){h=h%24;return(h<10?"0":"")+h+":00"}
-document.getElementById("sub").textContent="Share of each hour Kyiv spent under an air raid alert, "+PERIOD_LABEL+".";
+function h12(h){h=h%24;return{n:h%12||12,s:h<12?"AM":"PM"}}
+function slot(h){var a=h12(h),b=h12(h+1);return a.s==b.s?a.n+"–"+b.n+" "+b.s:a.n+" "+a.s+"–"+b.n+" "+b.s}
+document.getElementById("sub").textContent="The longer the wedge, the bigger the share of that hour Kyiv spent under an air raid alert, "+PERIOD_LABEL;
 var ns="http://www.w3.org/2000/svg",cx=200,cy=200,R=192,r0=R*.27,rM=R*.72,MAXP=Math.max(45,Math.ceil(Math.max.apply(null,P)/5)*5),TAU=2*Math.PI;
 function pt(r,a){return[cx+r*Math.sin(a),cy-r*Math.cos(a)]}
 function rad(p){return r0+p/MAXP*(rM-r0)}
@@ -83,13 +84,12 @@ function dial(id,listId,start,avgV,notes){
  el("circle",{cx:cx,cy:cy,r:R,fill:"var(--face)",stroke:"var(--ink)","stroke-width":3.5});
  for(var m=0;m<60;m++){var a=m/60*TAU,big=m%5==0,A=pt(R*(big?.88:.92),a),B=pt(R*.96,a);el("line",{x1:A[0],y1:A[1],x2:B[0],y2:B[1],stroke:big?"var(--ink)":"#9CA3AF","stroke-width":big?2.2:.8})}
  [10,20,30,40].forEach(function(g){if(g<MAXP)el("circle",{cx:cx,cy:cy,r:rad(g),fill:"none",stroke:"var(--grid)","stroke-width":1.2,"stroke-dasharray":"2 4"})});
- var l40=el("text",{x:cx,y:cy+rad(40)+11,"text-anchor":"middle","font-size":10,"font-weight":500,fill:"var(--mute)"});l40.textContent="40%";
  var c1,c2,c3;
- function show(h){c1.textContent=pad(h)+"–"+pad(h+1);c2.textContent=pc(P[h]);c3.textContent="≈"+Math.round(P[h]*.6)+" min per hour"}
+ function show(h){c1.textContent=slot(h);c2.textContent=pc(P[h]);c3.textContent="under alert"}
  function reset(){c1.textContent="average";c2.textContent=pc(avgV);c3.textContent="under alert"}
  for(var i=0;i<12;i++){(function(h){var p=P[h],g=.02,a0=(h%12)/12*TAU+g,a1=(h%12+1)/12*TAU-g,r1=rad(p),
    A=pt(r0,a0),B=pt(r1,a0),C=pt(r1,a1),D=pt(r0,a1),sleep=(h>=23||h<6);
-   var w=el("path",{d:"M"+A+"L"+B+"A"+r1+" "+r1+" 0 0 1 "+C+"L"+D+"A"+r0+" "+r0+" 0 0 0 "+A+"Z",fill:sleep?"var(--b9)":"var(--b7)","class":"w",tabindex:0,"aria-label":pad(h)+"–"+pad(h+1)+": "+pc(p)+" under alert"});
+   var w=el("path",{d:"M"+A+"L"+B+"A"+r1+" "+r1+" 0 0 1 "+C+"L"+D+"A"+r0+" "+r0+" 0 0 0 "+A+"Z",fill:sleep?"var(--b9)":"var(--b7)","class":"w",tabindex:0,"aria-label":slot(h)+": "+pc(p)+" under alert"});
    w.addEventListener("mouseenter",function(){show(h)});w.addEventListener("click",function(){show(h)});w.addEventListener("focus",function(){show(h)});
    var L=pt(R*.80,(h%12)/12*TAU),tx=el("text",{x:L[0],y:L[1]+8,"text-anchor":"middle","font-size":21,"font-weight":700,fill:"var(--ink)"});tx.textContent=h%12||12})((start+i)%24)}
  el("circle",{cx:cx,cy:cy,r:r0-4,fill:"var(--bg)"});
@@ -97,16 +97,17 @@ function dial(id,listId,start,avgV,notes){
  c2=el("text",{x:cx,y:cy+13,"text-anchor":"middle","font-size":27,"font-weight":700,fill:"var(--ink)"});
  c3=el("text",{x:cx,y:cy+29,"text-anchor":"middle","font-size":10,fill:"var(--mute)"});
  svg.addEventListener("mouseleave",reset);reset();
- var ol=document.getElementById(listId);
  notes.forEach(function(n,k){var mid=((n[0]%12)+.5)/12*TAU,q=pt(rad(P[n[0]])-R*.075,mid);
   var col=(n[0]>=23||n[0]<6)?"var(--b9)":"var(--b7)";
   el("circle",{cx:q[0],cy:q[1],r:11,fill:"#fff"});
   var nt=el("text",{x:q[0],y:q[1]+4.5,"text-anchor":"middle","font-size":13,"font-weight":700,fill:col,"pointer-events":"none"});nt.textContent=k+1;
-  var li=document.createElement("li");li.innerHTML="<span style=\"background:"+col+"\">"+(k+1)+"</span>"+n[1]+" · <b>"+pc(P[n[0]])+"</b>";ol.appendChild(li)});
+  var li=document.createElement("li");li.innerHTML="<span style=\"background:"+col+"\">"+(k+1)+"</span><div>"+slot(n[0])+" · <b>"+pc(P[n[0]])+"</b> under alert</div>";ol.appendChild(li)});
 }
-var mn=P.indexOf(Math.min.apply(null,P.slice(6,18))),mx=P.indexOf(Math.max.apply(null,P));
-dial("d1","n1",6,DAY,[[8,"Commute to work"],[9,"Workday starts"],[mn,"Calmest hour"],[17,"Commute home"]]);
-dial("d2","n2",18,NIGHT,[[19,"Family dinner"],[mx,mx>=18||mx<6?"Peak hour":"Evening"],[23,"Bedtime"],[4,"Before dawn"]]);
+function picks(start){var hrs=[];for(var i=0;i<12;i++)hrs.push((start+i)%24);
+ var byV=hrs.slice().sort(function(x,y){return P[y]-P[x]});
+ var sel=[byV[0],byV[1],byV[11]];return hrs.filter(function(h){return sel.indexOf(h)>-1}).map(function(h){return[h]})}
+dial("d1","n1",6,DAY,[]);
+dial("d2","n2",18,NIGHT,[]);
 /* auto-height for iframe embeds */
 (function(){var last=0;function send(){var h=Math.ceil(document.documentElement.getBoundingClientRect().height);if(h!==last){last=h;try{window.parent.postMessage({kiEmbed:"kyiv-alerts-clock",height:h},"*")}catch(e){}}}
 window.addEventListener("load",send);window.addEventListener("resize",send);if(window.ResizeObserver)new ResizeObserver(send).observe(document.body);setTimeout(send,300);})();
