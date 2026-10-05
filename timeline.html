@@ -127,7 +127,24 @@ function draw(){
  post();
 }
 function post(){try{window.parent.postMessage({kiEmbed:"kyiv-alerts-strip",height:Math.ceil(document.documentElement.getBoundingClientRect().height)},"*")}catch(e){}}
-draw();var rt;window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(draw,120)});window.addEventListener("load",post);
+draw();
+
+var rt;
+window.addEventListener("resize",function(){
+  clearTimeout(rt);
+  rt=setTimeout(draw,120);
+});
+
+window.addEventListener("load",function(){
+  post();
+  [300,1000,2500].forEach(function(ms){
+    setTimeout(post,ms);
+  });
+});
+
+if(window.ResizeObserver){
+  new ResizeObserver(post).observe(document.documentElement);
+}
 </script>
 </body>
 </html>
