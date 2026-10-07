@@ -22,6 +22,8 @@ h1{font-size:32px;line-height:40px;margin:0 0 8px;font-weight:700;letter-spacing
 .card b{display:block;font-size:16px;line-height:24px}
 .card span{display:block;font-size:14px;line-height:20px;color:var(--txt)}
 .card span.op{color:var(--op);font-weight:500}
+.badge.nx{outline:2px dashed #E0A800;outline-offset:3px}
+.card span.nx{color:#9A6B00;font-weight:500}
 .hint{font-size:16px;line-height:24px;color:var(--mute);font-style:italic;margin:0 0 8px}
 #wheel svg{display:block;width:100%;height:auto;overflow:visible;-webkit-tap-highlight-color:transparent}
 .hit{cursor:pointer;transition:opacity .15s}
@@ -30,7 +32,7 @@ svg.dim .hit:not(.sel){opacity:.35}
 .pop{position:absolute;z-index:5;width:260px;max-width:calc(100% - 32px);background:#fff;border-radius:8px;box-shadow:0 4px 24px rgba(17,24,39,.18);padding:16px 40px 16px 16px;font-size:14px;line-height:20px;color:var(--txt)}
 .pop[hidden]{display:none}
 .pop .k{font-size:12px;line-height:16px;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
-.pop h3{margin:0 0 8px;font-size:18px;line-height:24px;color:var(--ink)}
+.pop h3{margin:0;font-size:18px;line-height:24px;color:var(--ink)}
 .pop .st{font-weight:700;margin:0}.pop .st+p{margin-top:4px}
 .pop p{margin:0 0 8px}.pop p:last-child{margin:0}
 .pop ul{margin:0;padding:0 0 0 18px}
@@ -66,7 +68,7 @@ footer{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
 <p class="sub" id="sub"></p>
 <div class="key"><span><i style="background:var(--op)"></i>Opened</span><span><i style="background:var(--no)"></i>Not opened</span><span id="nextkey"><i style="background:none;border:2px dashed #E0A800;box-sizing:border-box"></i><em style="font-style:normal" id="nextlab"></em></span></div>
 <ul class="cards" id="cards"></ul>
-<p class="hint">Tap a cluster or a chapter for details</p>
+<p class="hint">Tap a chapter number to see its name</p>
 <div id="wheel"></div>
 <p class="note" id="note"></p>
 <div class="pop" id="pop" role="dialog" aria-live="polite" hidden><button type="button" aria-label="Close" id="popx">&times;</button><div id="popc"></div></div>
@@ -82,6 +84,7 @@ footer{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
    ===================================================================== */
 var AS_OF  = "Oct. 7, 2026";
 var THEME = (location.search.match(/theme=(\w+)/)||[])[1]||"status";   /* "status" (blue/gray) or "colors" (one colour per cluster) */
+var NEXT_SHORT = "Oct. 13";   /* date shown inside the wheel for clusters marked next:true; "" to hide */
 var NEXT_LABEL = "Could open Oct. 13";   /* legend text for clusters marked next:true (dashed yellow arc); set "" to hide */
 var SOURCE = "Source: European Commission, Ukraine&rsquo;s government, European Pravda, Radio Free Europe/Radio Liberty";
 var CLUSTERS = [
@@ -125,7 +128,7 @@ var byN={};CLUSTERS.forEach(function(c){byN[c.n]=c});
 /* cards */
 var cardsEl=document.getElementById("cards");
 CLUSTERS.forEach(function(c){var li=document.createElement("li");li.className="card";li.tabIndex=0;li.dataset.c=c.n;
- li.innerHTML='<div class="badge" style="background:'+CC(c).d+';color:'+CC(c).bt+'">'+c.n+'</div><div><b>'+c.name+'</b><span class="'+(c.status=="opened"&&THEME!="colors"?"op":"")+'">'+c.date+'</span></div>';
+ li.innerHTML='<div class="badge'+(c.next?' nx':'')+'" style="background:'+CC(c).d+';color:'+CC(c).bt+'">'+c.n+'</div><div><b>'+c.name+'</b><span class="'+(c.status=="opened"&&THEME!="colors"?"op":(c.next?"nx":""))+'">'+c.date+'</span></div>';
  li.addEventListener("click",function(e){e.stopPropagation();showCluster(c.n,li)});
  li.addEventListener("keydown",function(e){if(e.key=="Enter"||e.key==" "){e.preventDefault();showCluster(c.n,li)}});
  cardsEl.appendChild(li)});
@@ -141,11 +144,9 @@ function hide(){pop.hidden=true;if(svgEl)svgEl.classList.remove("dim");document.
 function mark(cn,num){hide();if(!svgEl)return;svgEl.classList.add("dim");
  svgEl.querySelectorAll(".hit").forEach(function(e){if(+e.dataset.c==cn&&(num==null||e.dataset.ch==num||e.dataset.ch==null&&num==null))e.classList.add("sel")});
  var cd=cardsEl.querySelector('[data-c="'+cn+'"]');if(cd)cd.classList.add("on")}
-function showCluster(cn,anchor,evt){var c=byN[cn];mark(cn,null);
- popc.innerHTML='<div class="k">Cluster '+c.n+' · '+CH[cn].length+' chapters</div><h3>'+c.name+'</h3><p class="st" style="color:'+CC(c).t+'">'+c.date+'</p>'+(c.detail?'<p>'+c.detail+'</p>':'');
- place(anchor,evt)}
+function showCluster(cn,anchor,evt){var on=svgEl&&svgEl.classList.contains("dim")&&cardsEl.querySelector('.card.on[data-c="'+cn+'"]');mark(cn,null);if(on)hide()}
 function showChapter(cn,num,name,anchor,evt){var c=byN[cn];mark(cn,num);
- popc.innerHTML='<div class="k">Chapter '+num+' · Cluster '+c.n+'</div><h3>'+name+'</h3><p class="st" style="color:'+CC(c).t+'">'+c.date+'</p>';
+ popc.innerHTML='<div class="k">Chapter '+num+' · Cluster '+c.n+'</div><h3>'+name+'</h3>';
  place(anchor,evt)}
 document.getElementById("popx").addEventListener("click",function(e){e.stopPropagation();hide()});
 pop.addEventListener("click",function(e){e.stopPropagation()});
@@ -164,10 +165,10 @@ var ICON={ /* simple 24x24 line icons */
  6:["c","M3 12h18","M12 3c3.5 3 3.5 15 0 18","M12 3c-3.5 3-3.5 15 0 18"]
 };
 function draw(){
- var box=document.getElementById("wheel"),W=box.clientWidth,labels=W>=720;
- var fsL=14,lhL=18,fsN=labels?16:(W<380?12:14),fsR=labels?14:(W<380?11:12);
+ var box=document.getElementById("wheel"),W=box.clientWidth,labels=false; /* chapter names live in the popups on every screen */
+ var fsL=14,lhL=18,fsN,fsR;
  var maxLab=labels?Math.min(210,(W/2-160)):0;
- var R=labels?Math.min(232,W/2-maxLab-40):Math.min(W/2-6,260);
+ var R=Math.min(W/2-8,270);fsN=Math.round(Math.max(12,R*.072));fsR=Math.round(Math.max(11,R*.062));
  var rH=R*.37,rR=R*.75,rW0=rR+3,cx=W/2,cy=0;
  function pol(r,th){var a=th*Math.PI/180;return[cx+r*Math.sin(a),cy-r*Math.cos(a)]}
  function sector(r0,r1,a0,a1){var p0=pol(r1,a0),p1=pol(r1,a1),p2=pol(r0,a1),p3=pol(r0,a0);
@@ -181,9 +182,10 @@ function draw(){
   var sp=el("path",{d:sector(rH,rR,a0,a1),fill:col.d,"class":"hit","data-c":c.n},gW);
   sp.addEventListener("click",function(e){e.stopPropagation();showCluster(c.n,sp,e)});
   /* icon + number, horizontal and identical for every cluster */
-  var cen=pol((rH+rR)/2,(a0+a1)/2),isz=labels?40:(W<380?26:32),g=el("g",{transform:"translate("+(cen[0]-isz/2).toFixed(1)+","+(cen[1]-isz/2-fsR*.7).toFixed(1)+") scale("+(isz/24)+")","pointer-events":"none",fill:"none",stroke:col.ic,"stroke-width":1.8,"stroke-linecap":"round","stroke-linejoin":"round"},gW);
+  var nx2=c.next&&NEXT_SHORT,cen=pol((rH+rR)/2-(nx2?fsR*.8:0),(a0+a1)/2);if(nx2)cen=[cen[0],cen[1]-fsR*.75];var isz=Math.round(R*.16),g=el("g",{transform:"translate("+(cen[0]-isz/2).toFixed(1)+","+(cen[1]-isz/2-fsR*.7).toFixed(1)+") scale("+(isz/24)+")","pointer-events":"none",fill:"none",stroke:col.ic,"stroke-width":1.8,"stroke-linecap":"round","stroke-linejoin":"round"},gW);
   ICON[c.n].forEach(function(d){el(d.charAt(0)=="c"?"circle":"path",d.charAt(0)=="c"?{cx:12,cy:12,r:9}:{d:d},g)});
   T(cen[0],cen[1]+isz/2+fsR*.9,c.n,{"text-anchor":"middle","font-size":Math.round(fsR*1.45),"font-weight":700,fill:col.ic,"pointer-events":"none"},gW);
+  if(c.next&&NEXT_SHORT)T(cen[0],cen[1]+isz/2+fsR*.9+fsR*1.35,NEXT_SHORT,{"text-anchor":"middle","font-size":fsR,"font-weight":700,fill:"#F4C652","pointer-events":"none"},gW);
   if(c.next){var pa=pol(R+6,a0+.5),pb=pol(R+6,a1-.5);el("path",{d:"M"+pa+"A"+(R+6)+","+(R+6)+" 0 0 1 "+pb,fill:"none",stroke:THEME=="colors"?"#111827":"var(--next)","stroke-width":THEME=="colors"?2.5:4,"stroke-dasharray":"6 4","stroke-linecap":"round","pointer-events":"none"},gW)}
   k.forEach(function(ch,i){var b0=a0+i*STEP,b1=b0+STEP,bm=(b0+b1)/2;
    var wp=el("path",{d:sector(rW0,R,b0,b1),fill:col.l,stroke:"var(--bg)","stroke-width":2,"class":"hit","data-c":c.n,"data-ch":ch[0]},gW);
