@@ -82,21 +82,21 @@ footer{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
    TO UPDATE: edit AS_OF and each cluster's status / date / detail below.
    status: "opened" or "not"   (both colours and the legend follow it)
    ===================================================================== */
-var AS_OF  = "Oct. 7, 2026";
+var AS_OF  = "Oct. 13, 2026";
 var THEME = (location.search.match(/theme=(\w+)/)||[])[1]||"status";   /* "status" (blue/gray) or "colors" (one colour per cluster) */
 var NEXT_SHORT = "";   /* date shown inside the wheel for clusters marked next:true; "" to hide */
-var NEXT_LABEL = "Could open Oct. 13";   /* legend text for clusters marked next:true (dashed yellow arc); set "" to hide */
+var NEXT_LABEL = "Next to open";   /* legend text for clusters marked next:true (dashed yellow arc); set "" to hide */
 var SOURCE = "Source: European Commission, Ukraine&rsquo;s government, European Pravda, Radio Free Europe/Radio Liberty";
 var CLUSTERS = [
  {n:1, name:"Fundamentals", short:["Fundamentals"], status:"opened", date:"Opened June 15, 2026",
   detail:"Opened first, closed last"},
- {n:2, name:"Internal market", short:["Internal market"], status:"not", next:true, date:"Could open Oct. 13, 2026",
-  detail:"If parliament passes a minority-language education bill"},
- {n:3, name:"Competitiveness & inclusive growth", short:["Competitiveness"], status:"not", next:true, date:"Could open Oct. 13, 2026",
-  detail:"If parliament passes a minority-language education bill"},
- {n:4, name:"Green agenda & sustainable connectivity", short:["Green agenda"], status:"not", date:"Expected by end of 2026",
+ {n:2, name:"Internal market", short:["Internal market"], status:"opened", date:"Opened Oct. 13, 2026",
   detail:""},
- {n:5, name:"Resources, agriculture & cohesion", short:["Resources"], status:"not", date:"Expected by end of 2026",
+ {n:3, name:"Competitiveness & inclusive growth", short:["Competitiveness"], status:"opened", date:"Opened Oct. 13, 2026",
+  detail:""},
+ {n:4, name:"Green agenda & sustainable connectivity", short:["Green agenda"], status:"not", next:true, date:"Next to open, expected by end of 2026",
+  detail:""},
+ {n:5, name:"Resources, agriculture & cohesion", short:["Resources"], status:"not", next:true, date:"Next to open, expected by end of 2026",
   detail:""},
  {n:6, name:"External relations", short:["External","relations"], status:"opened", date:"Opened July 14, 2026",
   detail:""}
