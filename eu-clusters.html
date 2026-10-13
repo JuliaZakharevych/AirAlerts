@@ -39,7 +39,7 @@ svg.dim .hit:not(.sel){opacity:.35}
 .pop button{position:absolute;top:8px;right:8px;width:28px;height:28px;border:0;border-radius:50%;background:#F0F0F0;color:var(--ink);font:700 16px/28px "e-Ukraine",Arial,sans-serif;cursor:pointer;padding:0}
 .note{font-size:14px;line-height:20px;color:var(--mute);margin:16px 0 0}
 footer{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;border-top:1px solid var(--grid);padding-top:16px;margin-top:24px}
-.src{font-size:12px;line-height:16px;color:var(--mute)}
+.src{font-size:12px;line-height:16px;color:var(--mute)}.src a{color:inherit;text-decoration:underline}
 .logo{flex:none;display:block;width:256px;margin-bottom:4px}.logo img{width:100%;height:auto;display:block}
 @media (min-width:860px){
  .cards{grid-template-columns:repeat(6,1fr);gap:8px}
@@ -86,7 +86,7 @@ var AS_OF  = "Oct. 13, 2026";
 var THEME = (location.search.match(/theme=(\w+)/)||[])[1]||"status";   /* "status" (blue/gray) or "colors" (one colour per cluster) */
 var NEXT_SHORT = "";   /* date shown inside the wheel for clusters marked next:true; "" to hide */
 var NEXT_LABEL = "Next to open";   /* legend text for clusters marked next:true (dashed yellow arc); set "" to hide */
-var SOURCE = "Source: European Commission, Ukraine&rsquo;s government, European Pravda, Radio Free Europe/Radio Liberty";
+var SOURCE = "Source: European Commission, Ukraine&rsquo;s government, European Pravda, Radio Free Europe/Radio Liberty. <a href=\"https://docs.google.com/spreadsheets/d/1nZYNH_L3KcZHwCJcfIrvL4Q-kOAvxHbTZ128s5bvDWo/edit?gid=680551183#gid=680551183\" target=\"_blank\" rel=\"noopener\">Data</a>";
 var CLUSTERS = [
  {n:1, name:"Fundamentals", short:["Fundamentals"], status:"opened", date:"Opened June 15, 2026",
   detail:"Opened first, closed last"},
