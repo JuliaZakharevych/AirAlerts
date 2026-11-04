@@ -10,7 +10,7 @@
  --next:#F4C652;--op:#0B3CEA;--opl:#C7D6FF;--no:#6B7280;--nol:#E0E0E0;--non:#4A4A4A}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"e-Ukraine",Arial,sans-serif;-webkit-text-size-adjust:100%}
-main{position:relative;max-width:920px;margin:0 auto;padding:32px 16px calc(48px + env(safe-area-inset-bottom,0px))}
+main{position:relative;max-width:920px;margin:0 auto;padding:32px 16px calc(24px + env(safe-area-inset-bottom,0px))}
 h1{font-size:32px;line-height:40px;margin:0 0 8px;font-weight:700;letter-spacing:-.01em}
 .sub{color:var(--txt);font-size:20px;line-height:28px;margin:0 0 24px}
 .key{display:flex;flex-wrap:wrap;gap:8px 24px;font-size:16px;line-height:24px;color:var(--txt);margin:0 0 16px}
@@ -51,7 +51,7 @@ footer{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
  .cards{grid-template-columns:repeat(3,1fr);gap:8px 16px}
 }
 @media (max-width:600px){
- main{padding:24px 16px 40px}
+ main{padding:24px 16px 16px}
  h1{font-size:24px;line-height:32px}
  .sub{font-size:16px;line-height:24px;margin-bottom:16px}
  .key{gap:8px 16px}
@@ -111,7 +111,7 @@ function arc(a0,a1,r0,r1){var p=pt(r1,a0),q=pt(r1,a1),s=pt(r0,a1),t=pt(r0,a0);re
 D.forEach(function(d){var s="",ang=GAP/2,tot=d.a.length+d.b.length;
  for(var c=1;c<=6;c++){var cs=ang;
   CH[c].forEach(function(n){var k=st(d,n),m=ang+W/2,tp=pt((R0+R1)/2+1,m);
-   s+='<g class="hit" tabindex="0" role="button" aria-label="Chapter '+n+', '+NM[n]+'" data-c="'+c+'" data-ch="'+n+'"><path d="'+arc(ang+.4,ang+W-.4,R0,R1)+'" fill="'+FILL[k]+'"/><text x="'+tp[0]+'" y="'+tp[1]+'" fill="'+TXT[k]+'" font-size="15" font-weight="700" text-anchor="middle" dominant-baseline="central">'+n+'</text></g>';ang+=W});
+   s+='<g class="hit" role="button" aria-label="Chapter '+n+', '+NM[n]+'" data-c="'+c+'" data-ch="'+n+'"><path d="'+arc(ang+.4,ang+W-.4,R0,R1)+'" fill="'+FILL[k]+'"/><text x="'+tp[0]+'" y="'+tp[1]+'" fill="'+TXT[k]+'" font-size="15" font-weight="700" text-anchor="middle" dominant-baseline="central">'+n+'</text></g>';ang+=W});
   var mp=pt(R0-16,(cs+ang)/2);s+='<text x="'+mp[0]+'" y="'+mp[1]+'" fill="#6B7280" font-size="14" font-weight="700" text-anchor="middle" dominant-baseline="central">'+c+'</text>';ang+=GAP}
  s+='<text x="'+C0+'" y="'+(C0-4)+'" text-anchor="middle" font-size="52" font-weight="700" fill="#111827">'+tot+'</text><text x="'+C0+'" y="'+(C0+24)+'" text-anchor="middle" font-size="15" fill="#333">of 33 chapters</text>';
  var box=document.createElement("div");box.innerHTML='<h2>'+d.n+'</h2><svg viewBox="0 0 400 400" role="group" aria-label="'+d.n+': '+tot+' of 33 chapters expected to close in 2027">'+s+'</svg>';wh.appendChild(box)});
