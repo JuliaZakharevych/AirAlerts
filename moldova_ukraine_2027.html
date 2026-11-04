@@ -10,7 +10,7 @@
  --next:#F4C652;--op:#0B3CEA;--opl:#C7D6FF;--no:#6B7280;--nol:#E0E0E0;--non:#4A4A4A}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"e-Ukraine",Arial,sans-serif;-webkit-text-size-adjust:100%}
-main{position:relative;max-width:920px;margin:0 auto;padding:32px 16px calc(24px + env(safe-area-inset-bottom,0px))}
+main{position:relative;max-width:920px;margin:0 auto;padding:32px 16px calc(48px + env(safe-area-inset-bottom,0px))}
 h1{font-size:32px;line-height:40px;margin:0 0 8px;font-weight:700;letter-spacing:-.01em}
 .sub{color:var(--txt);font-size:20px;line-height:28px;margin:0 0 24px}
 .key{display:flex;flex-wrap:wrap;gap:8px 24px;font-size:16px;line-height:24px;color:var(--txt);margin:0 0 16px}
@@ -51,7 +51,7 @@ footer{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
  .cards{grid-template-columns:repeat(3,1fr);gap:8px 16px}
 }
 @media (max-width:600px){
- main{padding:24px 16px 16px}
+ main{padding:24px 16px 40px}
  h1{font-size:24px;line-height:32px}
  .sub{font-size:16px;line-height:24px;margin-bottom:16px}
  .key{gap:8px 16px}
@@ -60,7 +60,7 @@ footer{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
  .logo{width:224px;align-self:flex-end}
  .pop{width:min(300px,calc(100% - 32px))}
 }
-.wheels{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px}.wheels h2{margin:0 0 4px;font-size:20px;line-height:28px;text-align:center}.wheels svg{display:block;width:100%;height:auto;-webkit-tap-highlight-color:transparent}.wheels.dim .hit:not(.sel){opacity:.3}.hit{cursor:pointer;outline:none}.hit:hover{opacity:.8}@media (max-width:700px){.wheels{grid-template-columns:1fr}}</style>
+.wheels{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px}.wheels h2{margin:0 0 4px;font-size:20px;line-height:28px;text-align:center}.wheels svg{display:block;width:100%;height:auto;-webkit-tap-highlight-color:transparent}.wheels.dim .hit:not(.sel){opacity:.3}.hit{cursor:pointer;outline:none}.hit:hover{opacity:.8}@media (max-width:600px){.wheels{grid-template-columns:1fr}}</style>
 </head>
 <body>
 <main id="main">
@@ -78,7 +78,7 @@ footer{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
 </footer>
 </main>
 <script>
-var SOURCE="Source: European Commission roadmaps (Nov. 4, 2026), Kyiv Independent calculations";
+var SOURCE="Source: European Commission";
 var CL=["Fundamentals","Internal market","Competitiveness & inclusive growth","Green agenda & sustainable connectivity","Resources, agriculture & cohesion","External relations"];
 var CH={1:[23,24,5,18,32],2:[1,2,3,4,6,7,8,9,28],3:[10,16,17,19,20,25,26,29],4:[14,15,21,27],5:[11,12,13,22,33],6:[30,31]};
 var NM={23:"Judiciary & fundamental rights",24:"Justice, freedom & security",5:"Public procurement",18:"Statistics",32:"Financial control",1:"Free movement of goods",2:"Free movement for workers",3:"Right of establishment & freedom to provide services",4:"Free movement of capital",6:"Company law",7:"Intellectual property law",8:"Competition policy",9:"Financial services",28:"Consumer & health protection",10:"Digital transformation & media",16:"Taxation",17:"Economic & monetary policy",19:"Social policy & employment",20:"Enterprise & industrial policy",25:"Science & research",26:"Education & culture",29:"Customs union",14:"Transport policy",15:"Energy",21:"Trans-European networks",27:"Environment & climate change",11:"Agriculture & rural development",12:"Food safety, veterinary & phytosanitary policy",13:"Fisheries & aquaculture",22:"Regional policy & coordination of structural instruments",33:"Financial & budgetary provisions",30:"External relations",31:"Foreign, security & defense policy"};
@@ -116,5 +116,9 @@ D.forEach(function(d){var s="",ang=GAP/2,tot=d.a.length+d.b.length;
  s+='<text x="'+C0+'" y="'+(C0-4)+'" text-anchor="middle" font-size="52" font-weight="700" fill="#111827">'+tot+'</text><text x="'+C0+'" y="'+(C0+24)+'" text-anchor="middle" font-size="15" fill="#333">of 33 chapters</text>';
  var box=document.createElement("div");box.innerHTML='<h2>'+d.n+'</h2><svg viewBox="0 0 400 400" role="group" aria-label="'+d.n+': '+tot+' of 33 chapters expected to close in 2027">'+s+'</svg>';wh.appendChild(box)});
 wh.querySelectorAll(".hit").forEach(function(g){var f=function(e){e.stopPropagation();show(+g.dataset.c,+g.dataset.ch,g,e)};g.addEventListener("click",f);g.addEventListener("keydown",function(e){if(e.key=="Enter"||e.key==" "){e.preventDefault();f(e)}})});
+</script>
+<script>
+(function(){function h(){try{parent.postMessage({kiEmbed:"moldova-ukraine-2027",height:Math.ceil(document.documentElement.getBoundingClientRect().height)},"*")}catch(e){}}
+window.addEventListener("load",h);window.addEventListener("resize",h);if(window.ResizeObserver)new ResizeObserver(h).observe(document.body)})();
 </script>
 </body></html>
